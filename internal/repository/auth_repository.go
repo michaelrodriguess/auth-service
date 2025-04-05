@@ -20,7 +20,7 @@ func NewUserAuthRepository(db *mongo.Database) *UserAuthRepository {
 	}
 }
 
-func (r *UserAuthRepository) Create(user *model.User) error {
+func (r *UserAuthRepository) Create(user *model.UserAuth) error {
 	user.ID = primitive.NewObjectID().Hex()
 	user.CreatedAt = time.Now()
 

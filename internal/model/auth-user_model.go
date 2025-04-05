@@ -2,7 +2,7 @@ package model
 
 import "time"
 
-type User struct {
+type UserAuth struct {
 	ID        string    `json:"id"`
 	Email     string    `json:"email"`
 	Password  string    `json:"-" bson:"password"`

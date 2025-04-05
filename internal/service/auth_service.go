@@ -21,7 +21,7 @@ func (s *AuthService) Register(req model.RegisterRequest) (*model.AuthResponse, 
 		return nil, err
 	}
 
-	user := &model.User{
+	user := &model.UserAuth{
 		Email:    req.Email,
 		Password: hashedPassword,
 		Role:     req.Role,
