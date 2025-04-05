@@ -22,7 +22,8 @@ auth-service/
 │   └── handler/           # Endpoints: login, register, validate
 ├── pkg/                    # Public code, shared libraries
 │   ├── auth/               # Authentication/authorization logic
+    ├── db/                 # Database logic
 │   ├── jwt/                # JWT implementation
 │   └── crypto/             # Cryptographic functions
 ├── config/                 # Application configuration
-└── migrations/             # Database migrations
+

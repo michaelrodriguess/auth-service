@@ -1,0 +1,36 @@
+package handler
+
+import (
+	"net/http"
+
+	"github.com/michaelrodriguess/auth_service/internal/model"
+	"github.com/michaelrodriguess/auth_service/internal/service"
+
+	"github.com/gin-gonic/gin"
+)
+
+type AuthHandler struct {
+	service *service.AuthService
+}
+
+func NewAuthHandler(service *service.AuthService) *AuthHandler {
+	return &AuthHandler{service: service}
+}
+
+func (h *AuthHandler) Register(c *gin.Context) {
+	var req model.RegisterRequest
+
+	err := c.ShouldBindJSON(&req)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	resp, err := h.service.Register(req)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, resp)
+}

@@ -1,0 +1,34 @@
+# Binary files
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+*.out
+
+# Directories
+bin/
+build/
+
+# Generated files by go build
+auth_service
+
+# Go Modules
+vendor/
+
+# Logs and temporary files
+*.log
+*.tmp
+
+# IDEs and editors
+.vscode/
+.idea/
+*.swp
+
+# MacOS
+.DS_Store
+
+# Environment files
+.env
+.env.*
