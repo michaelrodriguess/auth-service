@@ -16,13 +16,10 @@ auth-service/
 │   └── server/             # Server HTTP
 │       └── main.go
 ├── internal/               # Private code
-│   ├── domain/             # Domain entities and business rules
-│   │   ├── model/          # Domain models (User, Role, etc.)
-│   │   └── service/        # Business logic
+│   ├── model/              # Domain entities and business rules
+│   ├── service/            # Business logic
 │   ├── repository/         # Persistence layer
-│   ├── usecase/            # Application use cases
-│   └── delivery/           # Presentation layer
-│       └── http/           # HTTP handlers
+│   └── handler/           # Endpoints: login, register, validate
 ├── pkg/                    # Public code, shared libraries
 │   ├── auth/               # Authentication/authorization logic
 │   ├── jwt/                # JWT implementation
