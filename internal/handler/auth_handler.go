@@ -18,7 +18,7 @@ func NewAuthHandler(service *service.AuthService) *AuthHandler {
 }
 
 func (h *AuthHandler) Register(c *gin.Context) {
-	var req model.RegisterRequest
+	var req model.UserAuthRequest
 
 	err := c.ShouldBindJSON(&req)
 	if err != nil {

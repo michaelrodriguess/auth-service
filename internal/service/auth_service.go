@@ -15,7 +15,7 @@ func NewAuthService(repo *repository.UserAuthRepository) *AuthService {
 	return &AuthService{repo: repo}
 }
 
-func (s *AuthService) Register(req model.RegisterRequest) (*model.AuthResponse, error) {
+func (s *AuthService) Register(req model.UserAuthRequest) (*model.AuthResponse, error) {
 	hashedPassword, err := crypto.HashPassword(req.Password)
 	if err != nil {
 		return nil, err
