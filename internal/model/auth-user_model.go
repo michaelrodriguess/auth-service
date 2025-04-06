@@ -22,3 +22,12 @@ type AuthResponse struct {
 	Email string `json:"email"`
 	Role  string `json:"role"`
 }
+
+type UserLoginRequest struct {
+	Email    string `json:"email" binding:"required,email"`
+	Password string `json:"password" binding:"required,min=8"`
+}
+
+type LoginResponse struct {
+	Token string `json:"token"`
+}
