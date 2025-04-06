@@ -23,7 +23,7 @@ func NewUserAuthRepository(db *mongo.Database) *UserAuthRepository {
 }
 
 func (r *UserAuthRepository) Create(user *model.UserAuth) error {
-	user.ID = primitive.NewObjectID().Hex()
+	user.ID = primitive.NewObjectID()
 	user.CreatedAt = time.Now()
 
 	_, err := r.collection.InsertOne(context.TODO(), user)
@@ -40,9 +40,20 @@ func (r *UserAuthRepository) GetByEmail(ctx context.Context, email string) (*mod
 	err := r.collection.FindOne(ctx, bson.M{"email": email}).Decode(&user)
 	if err != nil {
 		if err == mongo.ErrNoDocuments {
-			return nil, errors.New("usuário não encontrado")
+			return nil, errors.New("users not found")
 		}
 
+		return nil, err
+	}
+
+	return &user, nil
+}
+
+func (r *UserAuthRepository) FindByID(ctx context.Context, id primitive.ObjectID) (*model.UserAuth, error) {
+	var user model.UserAuth
+
+	err := r.collection.FindOne(ctx, bson.M{"_id": id}).Decode(&user)
+	if err != nil {
 		return nil, err
 	}
 

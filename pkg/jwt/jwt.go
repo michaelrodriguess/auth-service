@@ -4,9 +4,8 @@ import (
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
+	"github.com/michaelrodriguess/auth_service/config"
 )
-
-var jwtKey = []byte("secret")
 
 type Claims struct {
 	Email string `json:"email"`
@@ -14,15 +13,17 @@ type Claims struct {
 	jwt.RegisteredClaims
 }
 
-func GenerateToken(email string, role string) (string, error) {
+func GenerateToken(id string, email string, role string) (string, error) {
 	claims := &Claims{
 		Email: email,
 		Role:  role,
 		RegisteredClaims: jwt.RegisteredClaims{
 			ExpiresAt: jwt.NewNumericDate(time.Now().Add(time.Hour * 24)),
+			Subject:   id,
 		},
 	}
 
+	secretKey := []byte(config.GetJWTSecret())
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-	return token.SignedString(jwtKey)
+	return token.SignedString(secretKey)
 }

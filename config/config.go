@@ -1,10 +1,13 @@
 package config
 
-// import (
-// 	"os"
-// )
+import (
+	"os"
+)
 
 func GetMongoURI() string {
-	return "mongodb://localhost:27017"
-	// return os.Getenv("MONGO_URI")
+	return os.Getenv("MONGO_URI")
+}
+
+func GetJWTSecret() string {
+	return os.Getenv("JWT_SECRET")
 }

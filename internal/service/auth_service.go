@@ -8,6 +8,7 @@ import (
 	"github.com/michaelrodriguess/auth_service/internal/repository"
 	"github.com/michaelrodriguess/auth_service/pkg/crypto"
 	"github.com/michaelrodriguess/auth_service/pkg/jwt"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -36,7 +37,7 @@ func (s *AuthService) Register(req model.UserAuthRequest) (*model.AuthResponse, 
 		return nil, err
 	}
 
-	token, err := jwt.GenerateToken(user.Email, user.Role)
+	token, err := jwt.GenerateToken(user.ID.Hex(), user.Email, user.Role)
 	if err != nil {
 		return nil, err
 	}
@@ -53,18 +54,27 @@ func (s *AuthService) Login(req model.UserLoginRequest) (*model.LoginResponse, e
 
 	user, err := s.repo.GetByEmail(ctx, req.Email)
 	if err != nil {
-		return nil, errors.New("Email or password invalid")
+		return nil, errors.New("email or password invalid")
 	}
 
 	err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(req.Password))
 	if err != nil {
-		return nil, errors.New("Email or password invalid")
+		return nil, errors.New("email or password invalid")
 	}
 
-	token, err := jwt.GenerateToken(user.Email, user.Role)
+	token, err := jwt.GenerateToken(user.ID.Hex(), user.Email, user.Role)
 	if err != nil {
 		return nil, err
 	}
 
 	return &model.LoginResponse{Token: token}, nil
+}
+
+func (s *AuthService) GetProfile(userID string) (*model.UserAuth, error) {
+	objID, err := primitive.ObjectIDFromHex(userID)
+	if err != nil {
+		return nil, err
+	}
+
+	return s.repo.FindByID(context.TODO(), objID)
 }
