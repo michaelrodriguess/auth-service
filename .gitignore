@@ -31,5 +31,4 @@ vendor/
 
 # Environment files
 .env
-.env.*
 .env/
