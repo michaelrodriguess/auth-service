@@ -32,7 +32,7 @@ func (s *AuthService) Register(req model.UserAuthRequest) (*model.AuthResponse, 
 		Role:     req.Role,
 	}
 
-	err = s.repo.Create(user)
+	err = s.repo.CreateUserAuth(user)
 	if err != nil {
 		return nil, err
 	}

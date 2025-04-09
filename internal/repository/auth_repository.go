@@ -22,11 +22,16 @@ func NewUserAuthRepository(db *mongo.Database) *UserAuthRepository {
 	}
 }
 
-func (r *UserAuthRepository) Create(user *model.UserAuth) error {
+func (r *UserAuthRepository) CreateUserAuth(user *model.UserAuth) error {
 	user.ID = primitive.NewObjectID()
 	user.CreatedAt = time.Now()
 
-	_, err := r.collection.InsertOne(context.TODO(), user)
+	_, err := r.GetByEmail(context.TODO(), user.Email)
+	if err == nil {
+		return errors.New("user already exists")
+	}
+
+	_, err = r.collection.InsertOne(context.TODO(), user)
 	if err != nil {
 		return err
 	}
