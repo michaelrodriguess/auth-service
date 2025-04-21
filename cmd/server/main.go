@@ -36,6 +36,7 @@ func main() {
 	r := gin.Default()
 	r.POST("/register", handler.Register)
 	r.POST("/login", handler.Login)
+	r.POST("/logout", handler.Logout)
 
 	authMiddlewareGroup := r.Group("/")
 	authMiddlewareGroup.Use(middleware.AuthMiddleware())

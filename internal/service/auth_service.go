@@ -78,3 +78,26 @@ func (s *AuthService) GetProfile(userID string) (*model.UserAuth, error) {
 
 	return s.repo.FindByID(context.TODO(), objID)
 }
+
+func (s *AuthService) Logout(authHeader string) error {
+	if authHeader == "" {
+		return errors.New("authorization header is required")
+	}
+
+	const bearerPrefix = "Bearer "
+	if len(authHeader) <= len(bearerPrefix) {
+		return errors.New("invalid authorization header format")
+	}
+
+	token := authHeader[len(bearerPrefix):]
+	if token == "" {
+		return errors.New("token not provided")
+	}
+
+	err := s.repo.AddTokenToBlocklist(context.TODO(), token)
+	if err != nil {
+		return errors.New("failed to invalidate token")
+	}
+
+	return nil
+}

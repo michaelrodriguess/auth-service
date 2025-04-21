@@ -5,6 +5,8 @@ import (
 	"errors"
 	"time"
 
+	"github.com/golang-jwt/jwt"
+	"github.com/michaelrodriguess/auth_service/config"
 	"github.com/michaelrodriguess/auth_service/internal/model"
 
 	"go.mongodb.org/mongo-driver/bson"
@@ -63,4 +65,35 @@ func (r *UserAuthRepository) FindByID(ctx context.Context, id primitive.ObjectID
 	}
 
 	return &user, nil
+}
+
+func (r *UserAuthRepository) AddTokenToBlocklist(ctx context.Context, token string) error {
+	parsedToken, err := jwt.Parse(token, func(token *jwt.Token) (interface{}, error) {
+		return []byte(config.GetJWTSecret()), nil
+	})
+
+	if err != nil {
+		return err
+	}
+
+	claims, ok := parsedToken.Claims.(jwt.MapClaims)
+	if !ok {
+		return errors.New("invalid token claims")
+	}
+
+	var expiresAt time.Time
+	if exp, ok := claims["exp"].(float64); ok {
+		expiresAt = time.Unix(int64(exp), 0)
+	} else {
+		expiresAt = time.Now().Add(time.Hour * 24)
+	}
+
+	blockedTokensColl := r.collection.Database().Collection("blocked_tokens")
+
+	_, err = blockedTokensColl.InsertOne(ctx, model.BlockedToken{
+		Token:     token,
+		ExpiresAt: expiresAt,
+	})
+
+	return err
 }

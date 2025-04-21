@@ -35,3 +35,12 @@ type UserLoginRequest struct {
 type LoginResponse struct {
 	Token string `json:"token"`
 }
+
+type LogoutResponse struct {
+	Message string `json:"message"`
+}
+
+type BlockedToken struct {
+	Token     string    `bson:"token"`
+	ExpiresAt time.Time `bson:"expires_at"`
+}
