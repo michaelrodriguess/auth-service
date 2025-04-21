@@ -1,12 +1,14 @@
 package middleware
 
 import (
+	"context"
 	"net/http"
 	"strings"
 
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/michaelrodriguess/auth_service/config"
+	"github.com/michaelrodriguess/auth_service/internal/repository"
 )
 
 type CustomClaims struct {
@@ -15,7 +17,7 @@ type CustomClaims struct {
 	jwt.RegisteredClaims
 }
 
-func AuthMiddleware() gin.HandlerFunc {
+func AuthMiddleware(repo *repository.UserAuthRepository) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		authHeader := c.GetHeader("Authorization")
 
@@ -26,6 +28,20 @@ func AuthMiddleware() gin.HandlerFunc {
 		}
 
 		tokenString := strings.TrimPrefix(authHeader, "Bearer ")
+
+		isBlocked, err := repo.IsTokenBlocked(context.TODO(), tokenString)
+		if err != nil {
+			c.JSON(http.StatusUnauthorized, gin.H{"error": "Token Invalid"})
+			c.Abort()
+			return
+		}
+
+		if isBlocked {
+			c.JSON(http.StatusUnauthorized, gin.H{"error": "Token has been revoked"})
+			c.Abort()
+			return
+		}
+
 		secretKey := config.GetJWTSecret()
 
 		claims := &CustomClaims{}

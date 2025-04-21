@@ -36,11 +36,11 @@ func main() {
 	r := gin.Default()
 	r.POST("/register", handler.Register)
 	r.POST("/login", handler.Login)
-	r.POST("/logout", handler.Logout)
 
 	authMiddlewareGroup := r.Group("/")
-	authMiddlewareGroup.Use(middleware.AuthMiddleware())
+	authMiddlewareGroup.Use(middleware.AuthMiddleware(repo))
 	authMiddlewareGroup.GET("/me", handler.Me)
+	authMiddlewareGroup.POST("/logout", handler.Logout)
 
 	r.Run(":8080")
 }

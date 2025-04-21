@@ -97,3 +97,14 @@ func (r *UserAuthRepository) AddTokenToBlocklist(ctx context.Context, token stri
 
 	return err
 }
+
+func (r *UserAuthRepository) IsTokenBlocked(ctx context.Context, token string) (bool, error) {
+	blockedTokensColl := r.collection.Database().Collection("blocked_tokens")
+
+	count, err := blockedTokensColl.CountDocuments(ctx, bson.M{"token": token})
+	if err != nil {
+		return false, err
+	}
+
+	return count > 0, nil
+}
