@@ -11,6 +11,7 @@ An authentication service built with **Go (Golang)** that provides user registra
 - ✅ Secure credential hashing
 - ✅ Middleware for protected routes
 - ✅ Docker and Makefile for easy setup
+- ✅ Password reset flow
 
 ---
 
@@ -130,7 +131,6 @@ JWT_SECRET=your_secure_secret_key
 
 ## 📌 Future Roadmap
 
-- [ ] Password reset flow
 - [ ] Refresh token support
 - [ ] RBAC (Role-based access control)
 
