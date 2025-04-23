@@ -108,3 +108,12 @@ func (r *UserAuthRepository) IsTokenBlocked(ctx context.Context, token string) (
 
 	return count > 0, nil
 }
+
+func (r *UserAuthRepository) UpdateUserPassword(ctx context.Context, user *model.UserAuth) error {
+	_, err := r.collection.UpdateOne(ctx, bson.M{"_id": user.ID}, bson.M{"$set": user, "$currentDate": bson.M{"updatedAt": true}})
+	if err != nil {
+		return err
+	}
+
+	return nil
+}

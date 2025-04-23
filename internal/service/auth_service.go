@@ -101,3 +101,31 @@ func (s *AuthService) Logout(authHeader string) error {
 
 	return nil
 }
+
+func (s *AuthService) ForgotPassword(req model.ForgotPasswordRequest) error {
+	ctx := context.TODO()
+
+	user, err := s.repo.GetByEmail(ctx, req.Email)
+	if err != nil {
+		return errors.New("email invalid")
+	}
+
+	err = crypto.ComparePassword(user.Password, req.OldPassword)
+	if err != nil {
+		return errors.New("password invalid")
+	}
+
+	hashedPassword, err := crypto.HashPassword(req.NewPassword)
+	if err != nil {
+		return err
+	}
+
+	user.Password = hashedPassword
+
+	err = s.repo.UpdateUserPassword(ctx, user)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}

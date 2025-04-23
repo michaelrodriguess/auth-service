@@ -44,3 +44,13 @@ type BlockedToken struct {
 	Token     string    `bson:"token"`
 	ExpiresAt time.Time `bson:"expires_at"`
 }
+
+type ForgotPasswordRequest struct {
+	Email       string `json:"email" binding:"required,email"`
+	OldPassword string `json:"old_password" binding:"required,min=8"`
+	NewPassword string `json:"new_password" binding:"required,min=8"`
+}
+
+type ForgotPasswordResponse struct {
+	Message string `json:"message"`
+}

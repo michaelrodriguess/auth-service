@@ -130,9 +130,8 @@ JWT_SECRET=your_secure_secret_key
 
 ## 📌 Future Roadmap
 
-- [ ] Unit and integration tests
-- [ ] Refresh token support
 - [ ] Password reset flow
+- [ ] Refresh token support
 - [ ] RBAC (Role-based access control)
 
 ---
