@@ -112,7 +112,7 @@ func (s *AuthService) ForgotPassword(req model.ForgotPasswordRequest) error {
 
 	err = crypto.ComparePassword(user.Password, req.OldPassword)
 	if err != nil {
-		return errors.New("password invalid")
+		return errors.New("old password invalid")
 	}
 
 	hashedPassword, err := crypto.HashPassword(req.NewPassword)
