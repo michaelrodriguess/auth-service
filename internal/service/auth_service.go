@@ -115,6 +115,10 @@ func (s *AuthService) ForgotPassword(req model.ForgotPasswordRequest) error {
 		return errors.New("old password invalid")
 	}
 
+	if req.OldPassword == req.NewPassword {
+		return errors.New("new password cannot be the same as old password")
+	}
+
 	hashedPassword, err := crypto.HashPassword(req.NewPassword)
 	if err != nil {
 		return err
