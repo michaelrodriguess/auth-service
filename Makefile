@@ -12,6 +12,10 @@ deps: tidy
 build:
 	go build -o $(APP_NAME) ./$(CMD_DIR)
 
+doc:
+	swag init -g cmd/server/main.go                                                                               ✗ ✭ ✱
+
+
 run:
 	go run ./$(CMD_DIR)/main.go
 
